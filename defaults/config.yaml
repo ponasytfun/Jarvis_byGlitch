@@ -1,0 +1,227 @@
+# JarvisAssistant default configuration.
+# This file is copied to %APPDATA%\JarvisAssistant\config.yaml on first launch.
+
+app:
+  name: JarvisAssistant
+  version: "1.0.0"
+  subtitle: "Local desktop command core"
+
+ui:
+  theme: dark
+  atom_theme: cold_blue
+  animations_enabled: true
+  compact_logs: false
+  chat_history_enabled: true
+  show_debug_panel: true
+  window_width: 1480
+  window_height: 940
+
+audio:
+  # Use null to follow the current Windows default microphone.
+  device_index: null
+  sample_rate: 16000
+  block_duration_ms: 20
+  calibration_seconds: 2.0
+
+trigger:
+  clap_count: 3
+  window_seconds: 2.5
+  min_clap_gap_ms: 120
+  max_clap_gap_ms: 900
+  amplitude_threshold: 0.12
+  cooldown_seconds: 10.0
+  noise_floor_auto_calibrate: true
+
+paths:
+  brave_path: "%ProgramFiles%\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"
+  # Do not add --user-data-dir, --guest, --incognito, or profile override args here.
+  brave_args: []
+  vscode_path: "%LocalAppData%\\Programs\\Microsoft VS Code\\Code.exe"
+  vscode_args: []
+  discord_path: "%LocalAppData%\\Discord\\Update.exe"
+  discord_launch_args:
+    - "--processStart"
+    - "Discord.exe"
+  obs_path: "%ProgramFiles%\\obs-studio\\bin\\64bit\\obs64.exe"
+  obs_args: []
+
+matching:
+  brave:
+    allowed_title_fragments:
+      - "Brave"
+      - "YouTube Music"
+    allowed_process_names:
+      - "brave.exe"
+    title_regex: ""
+    focus_retry_count: 3
+    focus_retry_delay_ms: 350
+    launch_timeout_ms: 15000
+    continue_on_error: true
+
+  vscode:
+    allowed_title_fragments:
+      - "Visual Studio Code"
+      - " - Visual Studio Code"
+    allowed_process_names:
+      - "Code.exe"
+    title_regex: ""
+    focus_retry_count: 3
+    focus_retry_delay_ms: 300
+    launch_timeout_ms: 18000
+    continue_on_error: false
+
+  discord:
+    allowed_title_fragments:
+      - "Discord"
+    allowed_process_names:
+      - "Discord.exe"
+    title_regex: ""
+    focus_retry_count: 5
+    focus_retry_delay_ms: 400
+    launch_timeout_ms: 22000
+    continue_on_error: true
+
+  obs:
+    allowed_title_fragments:
+      - "OBS"
+      - "OBS Studio"
+    allowed_process_names:
+      - "obs64.exe"
+    title_regex: ""
+    focus_retry_count: 3
+    focus_retry_delay_ms: 350
+    launch_timeout_ms: 15000
+    continue_on_error: true
+
+music:
+  music_query: "Should I Stay or Should I Go"
+  # Preferred for reliability. A direct track or playlist URL works better than search.
+  music_url: "https://music.youtube.com/watch?v=BN1WwnEDWAM"
+  playback_start_timeout_ms: 6000
+  post_open_delay_ms: 3200
+  # Leave this off by default so a direct track URL is not accidentally toggled into pause.
+  use_media_key_fallback: false
+  use_play_shortcut_fallback: false
+  play_shortcut_key: "k"
+  verify_playback_best_effort: true
+
+ai:
+  # "auto" prefers LM Studio first, then falls back to Ollama if allowed.
+  provider: auto
+  base_url: ""
+  model_name: ""
+  tool_routing_enabled: true
+  stream_enabled: false
+  temperature: 0.35
+  max_tokens: 220
+  request_timeout_seconds: 45
+  lm_studio_base_url: "http://127.0.0.1:1234/v1"
+  lm_studio_alt_base_url: "http://127.0.0.1:1234/api/v1"
+  ollama_base_url: "http://127.0.0.1:11434"
+  allow_ollama_fallback: true
+  system_prompt: >
+    You are Jarvis, a helpful local desktop assistant. You are concise,
+    practical, and capable of helping with coding, automation, system tasks,
+    and general questions. You run locally and should explain clearly when a
+    requested action requires user permission or a missing dependency.
+
+runtime:
+  default_workflow: triple_clap_focus_mode
+  dry_run: false
+
+logging:
+  level: INFO
+  max_bytes: 1048576
+  backup_count: 5
+
+voice:
+  enabled: true
+  click_to_talk_enabled: true
+  auto_start_with_listening: false
+  wake_word_enabled: false
+  # Optional openWakeWord custom model path. Leave blank to use wake-phrase STT fallback.
+  wake_word_model_path: ""
+  wake_phrases:
+    - "hey jarvis"
+    - "jarvis activate"
+  deactivate_phrases:
+    - "jarvis deactivate"
+    - "jarvis deactivate now"
+  wake_threshold: 0.52
+  wakeword_vad_threshold: 0.45
+  vad_enabled: true
+  vad_sensitivity: 0.55
+  speech_threshold: 0.018
+  listen_timeout_seconds: 15.0
+  silence_timeout_seconds: 1.2
+  silence_timeout_ms: 1200
+  min_record_seconds: 0.5
+  max_record_seconds: 20.0
+  max_utterance_seconds: 20.0
+  stt_backend: faster_whisper
+  stt_model: base.en
+  stt_fallback_model: tiny.en
+  stt_device: auto
+  stt_compute_type: auto
+  # "auto" tries Kokoro, then Piper, then the built-in Windows Speech API fallback.
+  tts_backend: auto
+  tts_voice: bf_emma
+  tts_rate: 1.0
+  tts_volume: 0.9
+  tts_model_path: "%APPDATA%\\JarvisAssistant\\models\\kokoro\\kokoro-v1.0.int8.onnx"
+  tts_voices_path: "%APPDATA%\\JarvisAssistant\\models\\kokoro\\voices-v1.0.bin"
+  piper_exe_path: ""
+  piper_model_path: ""
+  output_device_index: null
+  output_device_name: ""
+  barge_in_enabled: false
+  log_transcripts: true
+  speak_responses: true
+  acknowledgement_phrase: "Yes?"
+  test_phrase: "Voice systems nominal."
+
+debug:
+  log_level: INFO
+  save_audio_debug_files: false
+  save_transcripts: true
+
+workflows:
+  triple_clap_focus_mode:
+    description: >
+      Open Brave to YouTube Music, attempt playback, minimize Brave, then
+      focus or launch VS Code and Discord and arrange them side by side.
+    steps:
+      - action: open_music_in_brave
+        params: {}
+        retries: 1
+        continue_on_error: false
+
+      - action: minimize_window
+        params:
+          target: brave
+        retries: 2
+        delay_after_ms: 250
+        continue_on_error: true
+
+      - action: focus_or_launch_app
+        params:
+          target: vscode
+        timeout_ms: 18000
+        retries: 2
+        delay_after_ms: 300
+        continue_on_error: false
+
+      - action: focus_or_launch_app
+        params:
+          target: discord
+        timeout_ms: 22000
+        retries: 2
+        delay_after_ms: 300
+        continue_on_error: true
+
+      - action: arrange_two_windows_side_by_side
+        params:
+          left_target: vscode
+          right_target: discord
+        retries: 2
+        continue_on_error: true
